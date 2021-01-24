@@ -11,6 +11,7 @@ import com.like.paging.sample.data.db.Db
 import com.like.paging.sample.databinding.ActivityPagingBinding
 import com.like.paging.sample.paging.viewModel.PagingViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -26,11 +27,13 @@ class PagingActivity : AppCompatActivity() {
     }
 
     fun initial(view: View) {
-//        lifecycleScope.launch {
+        lifecycleScope.launch {
 //            Logger.printCollection(mViewModel.getBanner())
-//            Logger.printCollection(mViewModel.getTopArticle())
-//        }
-        mViewModel.getPagingResult().initial()
+            mViewModel.getTopArticleFlow().collect {
+                Logger.printCollection(it)
+            }
+        }
+//        mViewModel.getPagingResult().initial()
     }
 
     fun refresh(view: View) {

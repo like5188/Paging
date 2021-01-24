@@ -32,6 +32,7 @@ class PagingRepository(
     }
 
     suspend fun getTopArticle(isRefresh: Boolean): List<TopArticleEntity>? {
+        throw IllegalArgumentException("mock error")
         return topArticleDbDataSource.load()
     }
 
