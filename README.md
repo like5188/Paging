@@ -47,19 +47,11 @@
         implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:版本号'
         implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:版本号'
 
-        implementation 'com.github.like5188:DataSource:版本号'
+        implementation 'com.github.like5188:Paging:版本号'
     }
 ```
 
 2、使用
 ```java
-    1、创建数据源继承自
-
-    [com.like.paging.byDataKeyed.DataKeyedPagingDataSource]、[com.like.paging.byDataKeyed.DataKeyedPagingDbDataSource]
-
-    或者 [com.like.paging.byPageNoKeyed.PageNoKeyedPagingDataSource]、[com.like.paging.byPageNoKeyed.PageNoKeyedPagingDbDataSource]
-
-    ，然后通过 result() 方法获取 [com.like.paging.Result]。
-
-    2、参考例子
+    创建数据源继承自[com.like.paging.byDataKeyed.DataKeyedPagingDataSource]、[com.like.paging.byDataKeyed.DataKeyedPagingDbDataSource]或者[com.like.paging.byPageNoKeyed.PageNoKeyedPagingDataSource]、[com.like.paging.byPageNoKeyed.PageNoKeyedPagingDbDataSource]，然后通过 result() 方法获取 [com.like.paging.Result]，再通过它进行相关操作。
 ```
