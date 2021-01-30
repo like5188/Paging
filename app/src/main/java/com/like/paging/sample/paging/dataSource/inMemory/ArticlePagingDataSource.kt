@@ -1,7 +1,7 @@
 package com.like.paging.sample.paging.dataSource.inMemory
 
 import com.like.paging.RequestType
-import com.like.paging.byPageNoKeyed.PageNoKeyedPagingDataSource
+import com.like.paging.dataSource.byPageNoKeyed.PageNoKeyedPagingDataSource
 import com.like.paging.sample.MyApplication
 import com.like.paging.sample.data.model.ArticleEntity
 import com.like.paging.sample.data.netWork.RetrofitUtils

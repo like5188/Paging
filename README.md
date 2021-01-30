@@ -7,9 +7,7 @@
 ## 功能介绍
 1、该项目是基于 kotlin + coroutines + androidx 开发的分页数据源。
 
-2、包括2种数据源：包含数据库、不包含数据库。
-
-3、返回的数据：
+2、返回的数据：
 ```java
     data class Result<ResultType>(
         // 结果报告
@@ -53,5 +51,7 @@
 
 2、使用
 ```java
-    创建数据源继承自[com.like.paging.byDataKeyed.DataKeyedPagingDataSource]、[com.like.paging.byDataKeyed.DataKeyedPagingDbDataSource]或者[com.like.paging.byPageNoKeyed.PageNoKeyedPagingDataSource]、[com.like.paging.byPageNoKeyed.PageNoKeyedPagingDbDataSource]，然后通过 result() 方法获取 [com.like.paging.Result]，再通过它进行相关操作。
+    1、创建数据源继承自[com.like.paging.dataSource.byDataKeyed.DataKeyedPagingDataSource]、[com.like.paging.dataSource.byPageNoKeyed.PageNoKeyedPagingDataSource]，然后通过 result() 方法获取 [com.like.paging.Result]，再通过它进行相关操作。
+
+    2、如果要使用数据库，可以通过[com.like.paging.dbHelper.IPagingDbHelper]来实现。
 ```

@@ -1,5 +1,9 @@
-package com.like.paging
+package com.like.paging.dataSource
 
+import com.like.paging.RequestState
+import com.like.paging.RequestType
+import com.like.paging.Result
+import com.like.paging.ResultReport
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow

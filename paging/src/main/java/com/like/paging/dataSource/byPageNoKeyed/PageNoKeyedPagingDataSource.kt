@@ -1,8 +1,8 @@
-package com.like.paging.byPageNoKeyed
+package com.like.paging.dataSource.byPageNoKeyed
 
 import androidx.annotation.WorkerThread
 import com.like.paging.RequestType
-import com.like.paging.PagingDataSource
+import com.like.paging.dataSource.PagingDataSource
 
 /**
  * 根据自己维护的 pageNo 来作为分页 key 的分页数据源。

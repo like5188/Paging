@@ -2,7 +2,7 @@ package com.like.paging.sample.paging.dataSource.inDb
 
 import com.like.common.util.successIfOneSuccess
 import com.like.paging.RequestType
-import com.like.paging.byPageNoKeyed.PageNoKeyedPagingDataSource
+import com.like.paging.dataSource.byPageNoKeyed.PageNoKeyedPagingDataSource
 import com.like.paging.sample.MyApplication
 
 class MergePagingDbDataSource(

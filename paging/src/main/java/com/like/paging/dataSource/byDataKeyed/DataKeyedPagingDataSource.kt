@@ -1,8 +1,8 @@
-package com.like.paging.byDataKeyed
+package com.like.paging.dataSource.byDataKeyed
 
 import androidx.annotation.WorkerThread
 import com.like.paging.RequestType
-import com.like.paging.PagingDataSource
+import com.like.paging.dataSource.PagingDataSource
 
 /**
  * 根据接口返回的数据，由用户来确定分页 key 的分页数据源。
@@ -25,11 +25,11 @@ abstract class DataKeyedPagingDataSource<Key : Any, ResultType>(private val page
     /**
      * 根据返回的数据获取上一页或者下一页的 key。
      */
-    protected abstract fun getKey(data: ResultType): Key?
+    protected abstract fun getKey(result: ResultType): Key?
 
     /**
      * @param requestType   请求类型：[RequestType]
-     * @param key           上一页、下一页的标记。
+     * @param key           上一页、下一页的标记。当请求类型为：[RequestType.Initial]或者[RequestType.Refresh]时，[key]为null
      * @param pageSize      每页加载数量
      */
     @WorkerThread

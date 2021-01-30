@@ -3,43 +3,41 @@ package com.like.paging.sample.paging.dataSource.inDb
 import android.content.Context
 import com.like.common.util.isInternetAvailable
 import com.like.paging.RequestType
-import com.like.paging.sample.data.netWork.RetrofitUtils
-import com.like.paging.byPageNoKeyed.PageNoKeyedPagingDbDataSource
+import com.like.paging.dataSource.byPageNoKeyed.PageNoKeyedPagingDataSource
+import com.like.paging.dbHelper.IPagingDbHelper
 import com.like.paging.sample.MyApplication
 import com.like.paging.sample.data.db.ArticleEntityDao
 import com.like.paging.sample.data.model.ArticleEntity
+import com.like.paging.sample.data.netWork.RetrofitUtils
 
 class ArticlePagingDbDataSource(private val context: Context, private val articleEntityDao: ArticleEntityDao) :
-    PageNoKeyedPagingDbDataSource<List<ArticleEntity>?>(MyApplication.PAGE_SIZE) {
+    PageNoKeyedPagingDataSource<List<ArticleEntity>?>(MyApplication.PAGE_SIZE) {
+    private val mDbHelper = object : IPagingDbHelper<Int, List<ArticleEntity>?> {
+        override suspend fun loadFromDb(requestType: RequestType, key: Int?, pageSize: Int): List<ArticleEntity>? {
+            return articleEntityDao.getPage((key ?: getInitialPage()) * pageSize, pageSize)
+        }
+
+        override fun shouldFetch(requestType: RequestType, result: List<ArticleEntity>?): Boolean {
+            return context.isInternetAvailable() && (result.isNullOrEmpty() || requestType == RequestType.Refresh)
+        }
+
+        override suspend fun fetchFromNetworkAndSaveToDb(requestType: RequestType, key: Int?, pageSize: Int) {
+            val data = RetrofitUtils.retrofitApi.getArticle(key ?: getInitialPage()).getDataIfSuccess()?.datas
+            if (!data.isNullOrEmpty()) {
+                if (requestType == RequestType.Refresh) {
+                    articleEntityDao.deleteAll()
+                }
+                articleEntityDao.insertAll(data)
+            }
+        }
+    }
+
+    override suspend fun load(requestType: RequestType, pageNo: Int, pageSize: Int): List<ArticleEntity>? {
+        return mDbHelper.load(requestType, pageNo, pageSize)
+    }
 
     override fun getInitialPage(): Int {
         return 0
-    }
-
-    override suspend fun loadFromDb(
-        requestType: RequestType,
-        pageNo: Int,
-        pageSize: Int
-    ): List<ArticleEntity>? {
-        return articleEntityDao.getPage(pageNo * pageSize, pageSize)
-    }
-
-    override fun shouldFetch(requestType: RequestType, resultType: List<ArticleEntity>?): Boolean {
-        return context.isInternetAvailable() && (resultType.isNullOrEmpty() || requestType == RequestType.Refresh)
-    }
-
-    override suspend fun fetchFromNetworkAndSaveToDb(
-        requestType: RequestType,
-        pageNo: Int,
-        pageSize: Int
-    ) {
-        val data = RetrofitUtils.retrofitApi.getArticle(pageNo).getDataIfSuccess()?.datas
-        if (!data.isNullOrEmpty()) {
-            if (requestType == RequestType.Refresh) {
-                articleEntityDao.deleteAll()
-            }
-            articleEntityDao.insertAll(data)
-        }
     }
 
 }
