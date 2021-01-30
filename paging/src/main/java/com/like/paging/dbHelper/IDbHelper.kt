@@ -1,22 +1,19 @@
 package com.like.paging.dbHelper
 
-import android.util.Log
-
 /**
  * 不分页数据需要存储数据库时，可以使用此接口，此接口的[load]方法实现了一种存储策略。
  */
 interface IDbHelper<ResultType> {
 
     suspend fun load(isRefresh: Boolean = false): ResultType {
-        val tag = IDbHelper::class.java.simpleName
         var data = loadFromDb(isRefresh)
         if (shouldFetch(isRefresh, data)) {
-            Log.d(tag, "即将从网络获取数据并存入数据库中")
+            //即将从网络获取数据并存入数据库中
             fetchFromNetworkAndSaveToDb(isRefresh)
-            Log.d(tag, "即将重新从数据库获取数据")
+            //即将重新从数据库获取数据
             data = loadFromDb(isRefresh)
         }
-        Log.d(tag, "从数据库获取到了数据：$data")
+        //从数据库获取到了数据
         return data
     }
 

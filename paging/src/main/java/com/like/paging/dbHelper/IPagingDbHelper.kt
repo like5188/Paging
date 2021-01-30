@@ -1,6 +1,5 @@
 package com.like.paging.dbHelper
 
-import android.util.Log
 import com.like.paging.RequestType
 
 /**
@@ -9,15 +8,15 @@ import com.like.paging.RequestType
 interface IPagingDbHelper<Key : Any, ResultType> {
 
     suspend fun load(requestType: RequestType, key: Key?, pageSize: Int): ResultType {
-        val tag = IPagingDbHelper::class.java.simpleName
+        val tag = this::class.java.simpleName
         var data = loadFromDb(requestType, key, pageSize)
         if (shouldFetch(requestType, data)) {
-            Log.d(tag, "即将从网络获取数据并存入数据库中")
+            //即将从网络获取数据并存入数据库中
             fetchFromNetworkAndSaveToDb(requestType, key, pageSize)
-            Log.d(tag, "即将重新从数据库获取数据")
+            //即将重新从数据库获取数据
             data = loadFromDb(requestType, key, pageSize)
         }
-        Log.d(tag, "从数据库获取到了数据：$data")
+        //从数据库获取到了数据
         return data
     }
 
