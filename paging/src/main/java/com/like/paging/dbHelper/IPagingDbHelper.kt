@@ -8,7 +8,6 @@ import com.like.paging.RequestType
 interface IPagingDbHelper<Key : Any, ResultType> {
 
     suspend fun load(requestType: RequestType, key: Key?, pageSize: Int): ResultType {
-        val tag = this::class.java.simpleName
         var data = loadFromDb(requestType, key, pageSize)
         if (shouldFetch(requestType, data)) {
             //即将从网络获取数据并存入数据库中
