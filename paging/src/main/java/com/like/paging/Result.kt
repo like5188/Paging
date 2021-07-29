@@ -9,13 +9,13 @@ data class Result<ResultType>(
     // 结果报告
     val resultReportFlow: Flow<ResultReport<ResultType>>,
     // 初始化操作
-    val initial: () -> Unit,
+    val initial: suspend () -> Unit,
     // 刷新操作
-    val refresh: () -> Unit,
+    val refresh: suspend () -> Unit,
     // 失败重试操作
-    val retry: () -> Unit,
+    val retry: suspend () -> Unit,
     // 往后加载更多，不分页时不用设置
-    val loadAfter: (() -> Unit)? = null,
+    val loadAfter: (suspend () -> Unit)? = null,
     // 往前加载更多，不分页时不用设置
-    val loadBefore: (() -> Unit)? = null
+    val loadBefore: (suspend () -> Unit)? = null
 )

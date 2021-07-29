@@ -84,6 +84,11 @@ dependencies {
     implementation 'androidx.room:room-runtime:2.3.0'
     implementation 'androidx.room:room-ktx:2.3.0'// room 对协程的支持：suspend
     kapt 'androidx.room:room-compiler:2.3.0'
+    // ViewModel 对协程的支持：viewModelScope
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
+    // Activity 或 Fragment 对协程的支持：lifecycleScope
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.1"
+    implementation "org.koin:koin-androidx-viewmodel:2.2.2"
 
     implementation project(':paging')// debug 版本直接引用本地项目
 }

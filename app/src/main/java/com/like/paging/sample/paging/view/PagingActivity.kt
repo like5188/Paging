@@ -28,28 +28,37 @@ class PagingActivity : AppCompatActivity() {
 
     fun initial(view: View) {
         lifecycleScope.launch {
-//            Logger.printCollection(mViewModel.getBanner())
             mViewModel.getTopArticleFlow().collect {
                 Logger.printCollection(it)
             }
         }
-//        mViewModel.getPagingResult().initial()
+        lifecycleScope.launch {
+            mViewModel.getPagingResult().initial()
+        }
     }
 
     fun refresh(view: View) {
-        mViewModel.getPagingResult().refresh()
+        lifecycleScope.launch {
+            mViewModel.getPagingResult().refresh()
+        }
     }
 
     fun loadAfter(view: View) {
-        mViewModel.getPagingResult().loadAfter?.invoke()
+        lifecycleScope.launch {
+            mViewModel.getPagingResult().loadAfter?.invoke()
+        }
     }
 
     fun loadBefore(view: View) {
-        mViewModel.getPagingResult().loadBefore?.invoke()
+        lifecycleScope.launch {
+            mViewModel.getPagingResult().loadBefore?.invoke()
+        }
     }
 
     fun retry(view: View) {
-        mViewModel.getPagingResult().retry()
+        lifecycleScope.launch {
+            mViewModel.getPagingResult().retry()
+        }
     }
 
     fun clearDb(view: View) {
