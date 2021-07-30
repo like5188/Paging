@@ -89,6 +89,9 @@ dependencies {
     // Activity 或 Fragment 对协程的支持：lifecycleScope
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.1"
     implementation "org.koin:koin-androidx-viewmodel:2.2.2"
+    // coroutines
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0'
 
     implementation project(':paging')// debug 版本直接引用本地项目
 }
