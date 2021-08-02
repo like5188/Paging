@@ -3,7 +3,9 @@ package com.like.paging.util
 import com.like.paging.RequestState
 import com.like.paging.RequestType
 import com.like.paging.Result
+import com.like.paging.ResultReport
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 
@@ -70,8 +72,8 @@ fun <ValueInList> Result<List<ValueInList>?>.bind(
     hide: (() -> Unit)? = null,
     onFailed: (suspend (RequestType, Throwable) -> Unit)? = null,
     onSuccess: (suspend (RequestType, List<ValueInList>?) -> Unit)? = null,
-): Result<List<ValueInList>?> {
-    resultReportFlow.onEach { resultReport ->
+): Flow<ResultReport<List<ValueInList>?>> {
+    return resultReportFlow.onEach { resultReport ->
         val state = resultReport.state
         val type = resultReport.type
         // 数据处理
@@ -125,5 +127,4 @@ fun <ValueInList> Result<List<ValueInList>?>.bind(
             }
         }
     }
-    return this
 }
