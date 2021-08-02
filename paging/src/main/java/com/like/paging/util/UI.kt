@@ -8,6 +8,10 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 
 /**
+ * 绑定数据到界面（通常为 RecyclerView）的扩展工具类。
+ */
+
+/**
  * 绑定不分页数据到界面。
  * 执行获取数据的 suspend 函数，并控制进度条的显示隐藏。
  *
