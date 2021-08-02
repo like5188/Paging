@@ -6,7 +6,7 @@ import com.like.paging.Result
 import kotlinx.coroutines.flow.onEach
 
 /**
- * 绑定列表数据到界面上
+ * 绑定分页数据
  *
  * @param onData            初始化或者刷新成功并且有数据时回调。
  * @param onLoadMore        加载更多成功并且有数据时回调。
