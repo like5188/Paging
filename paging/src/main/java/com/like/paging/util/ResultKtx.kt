@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 
 /**
+ * 绑定不分页数据到界面。
  * 执行获取数据的 suspend 函数，并控制进度条的显示隐藏。
  *
  * @param onData            有数据时回调。
@@ -41,7 +42,7 @@ suspend fun <ValueInList> (suspend () -> List<ValueInList>?).bind(
 }
 
 /**
- * 绑定分页数据的 Result 绑定到 RecyclerView。
+ * 绑定分页数据的 Result 绑定到界面。
  *
  * @param onInitialOrRefresh        初始化或者刷新成功并且有数据时回调。
  * @param onLoadMore                加载更多成功并且有数据时回调。
