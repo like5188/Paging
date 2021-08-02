@@ -67,9 +67,9 @@ fun <ResultType> Result<ResultType>.bindProgress(
 /**
  * 绑定列表数据
  *
- * @param onData           初始化或者刷新成功并且有数据时回调。
- * @param onEmpty      初始化或者刷新成功并且没有数据时回调。
- * @param onError      初始化失败时回调。
+ * @param onData            初始化或者刷新成功并且有数据时回调。
+ * @param onEmpty           初始化或者刷新成功并且没有数据时回调。
+ * @param onError           初始化失败时回调。
  * @param onLoadMore        加载更多成功并且有数据时回调。
  * @param onLoadMoreEnd     加载更多成功并且没有数据时回调。
  * @param onLoadMoreError   加载更多失败时回调。
