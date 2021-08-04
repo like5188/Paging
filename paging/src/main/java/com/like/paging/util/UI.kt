@@ -24,7 +24,7 @@ import kotlinx.coroutines.withContext
  * @param hide              初始化或者刷新成功或者失败时隐藏进度条
  */
 suspend fun <ValueInList> (suspend () -> List<ValueInList>?).bind(
-    onData: (List<ValueInList>) -> Unit,
+    onData: (List<ValueInList>?) -> Unit,
     onEmpty: (() -> Unit)? = null,
     onError: ((Throwable) -> Unit)? = null,
     show: (() -> Unit)? = null,
@@ -95,13 +95,13 @@ fun <ValueInList> Result<List<ValueInList>?>.bind(
                         val list = state.data
                         if (list.isNullOrEmpty()) {
                             // 到底了
-                            onLoadMoreEnd?.invoke()
+                            onLoadMoreEnd()
                         } else {
-                            onLoadMore?.invoke(list)
+                            onLoadMore(list)
                         }
                     }
                     is RequestState.Failed -> {
-                        onLoadMoreError?.invoke(state.throwable)
+                        onLoadMoreError(state.throwable)
                     }
                 }
             }
