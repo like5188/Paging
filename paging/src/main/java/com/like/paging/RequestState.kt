@@ -11,7 +11,7 @@ sealed class RequestState<out ResultType> {
         }
     }
 
-    data class Success<T>(val data: T) : RequestState<T>() {
+    data class Success<ResultType>(val data: ResultType) : RequestState<ResultType>() {
         override fun toString(): String {
             return "Success[$data]"
         }
