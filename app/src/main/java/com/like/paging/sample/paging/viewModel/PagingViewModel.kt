@@ -1,25 +1,14 @@
 package com.like.paging.sample.paging.viewModel
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.like.common.util.Logger
 import com.like.paging.sample.data.model.BannerInfo
 import com.like.paging.sample.data.model.TopArticleEntity
 import com.like.paging.sample.paging.repository.PagingRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 
 class PagingViewModel(private val pagingRepository: PagingRepository) : ViewModel() {
-    init {
-        // 分页使用
-        viewModelScope.launch {
-            pagingRepository.getPagingResult().flow.collect {
-                Logger.d(it)
-            }
-        }
-    }
-
     // 分页使用
     fun getPagingResult() = pagingRepository.getPagingResult()
 

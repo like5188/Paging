@@ -11,7 +11,7 @@ import com.like.paging.sample.data.db.Db
 import com.like.paging.sample.databinding.ActivityPagingBinding
 import com.like.paging.sample.paging.viewModel.PagingViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -24,14 +24,23 @@ class PagingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding
+
+        lifecycleScope.launch {
+            mViewModel.getPagingResult().flow
+                .onStart {
+                    Logger.d("onStart ${Thread.currentThread().name}")
+                }.onCompletion {
+                    Logger.d("onCompletion ${Thread.currentThread().name} $it")
+                }.catch {
+                    Logger.d("catch ${Thread.currentThread().name} $it")
+                }.flowOn(Dispatchers.IO)
+                .collect {
+                    Logger.d(it)
+                }
+        }
     }
 
     fun initial(view: View) {
-        lifecycleScope.launch {
-            mViewModel.getTopArticleFlow().collect {
-                Logger.printCollection(it)
-            }
-        }
         lifecycleScope.launch {
             mViewModel.getPagingResult().initial()
         }
