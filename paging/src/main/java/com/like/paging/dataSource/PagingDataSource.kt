@@ -25,8 +25,6 @@ abstract class PagingDataSource<ResultType>(private val isLoadAfter: Boolean) {
 
     fun isRunning() = isRunning.get()
 
-    private fun getResultReportFlow(): Flow<ResultReport<ResultType>> = mFlow
-
     private suspend fun initial() {
         this.loadData(RequestType.Initial)
     }
@@ -68,7 +66,7 @@ abstract class PagingDataSource<ResultType>(private val isLoadAfter: Boolean) {
     }
 
     fun result(): Result<ResultType> = Result(
-        resultReportFlow = getResultReportFlow(),
+        flow = mFlow,
         initial = this::initial,
         refresh = this::refresh,
         retry = this::retry,

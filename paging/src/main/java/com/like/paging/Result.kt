@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
  */
 data class Result<ResultType>(
     // 结果报告
-    val resultReportFlow: Flow<ResultReport<ResultType>>,
+    val flow: Flow<ResultReport<ResultType>>,
     // 初始化操作
     val initial: suspend () -> Unit,
     // 刷新操作

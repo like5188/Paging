@@ -14,7 +14,7 @@ class PagingViewModel(private val pagingRepository: PagingRepository) : ViewMode
     init {
         // 分页使用
         viewModelScope.launch {
-            pagingRepository.getPagingResult().resultReportFlow.collect {
+            pagingRepository.getPagingResult().flow.collect {
                 Logger.d(it)
             }
         }
