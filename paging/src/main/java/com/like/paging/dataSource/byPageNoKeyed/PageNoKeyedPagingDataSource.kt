@@ -18,6 +18,9 @@ abstract class PageNoKeyedPagingDataSource<ResultType>(private val pageSize: Int
             }
             is RequestType.Before -> {
                 pageNo--
+                if (pageNo < getInitialPage()) {
+                    pageNo = getInitialPage()
+                }
             }
             is RequestType.After -> {
                 pageNo++
@@ -33,6 +36,9 @@ abstract class PageNoKeyedPagingDataSource<ResultType>(private val pageSize: Int
                 }
                 is RequestType.After -> {
                     pageNo--
+                    if (pageNo < getInitialPage()) {
+                        pageNo = getInitialPage()
+                    }
                 }
             }
             throw e
