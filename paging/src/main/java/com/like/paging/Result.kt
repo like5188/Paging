@@ -24,7 +24,7 @@ data class Result<ResultType>(
 )
 
 /**
- * 绑定分页数据到界面。
+ * 绑定分页数据到界面。(线程安全)
  * 成功失败回调，进度条显示隐藏。
  *
  * @param onSuccess         请求成功后回调。
