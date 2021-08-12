@@ -1,6 +1,8 @@
 package com.like.paging
 
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onEach
 
 /**
@@ -60,5 +62,5 @@ fun <ResultType> Result<ResultType>.bind(
                 onError?.invoke(type, state.throwable)
             }
         }
-    }
+    }.flowOn(Dispatchers.Main)
 }

@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import com.like.common.util.Logger
+import com.like.paging.bind
 import com.like.paging.sample.R
 import com.like.paging.sample.data.db.Db
 import com.like.paging.sample.databinding.ActivityPagingBinding
@@ -25,10 +26,12 @@ class PagingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         mBinding
 
-        lifecycleScope.launch {
-            mViewModel.getPagingResult().flow.collect {
-                Logger.d(it)
-            }
+        lifecycleScope.launch(Dispatchers.IO) {
+            mViewModel.getPagingResult().bind(
+                onSuccess = { requestType, resultType ->
+                    Logger.d("${Thread.currentThread().name} $resultType")
+                }
+            ).collect()
         }
     }
 
