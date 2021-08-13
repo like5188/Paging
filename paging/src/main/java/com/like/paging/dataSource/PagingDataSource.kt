@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicBoolean
  * 1、管理初始化、刷新、往后加载更多、往前加载更多、重试操作。
  * 2、管理请求状态。[RequestState]
  * 3、限制请求。如果当前正在执行，则不管新请求。
- * 注意：getResultReportFlow() 得到的 [Flow] collect 过后，不会取消，会一直搜集数据。
+ * 注意：mFlow.collect() 过后，不会取消，会一直搜集数据。
  *
  * @param ResultType    返回的数据类型
  * @param isLoadAfter   true：往后加载更多（默认值）；false：往前加载更多。
