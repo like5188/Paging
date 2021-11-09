@@ -11,7 +11,6 @@ import com.like.paging.sample.data.db.Db
 import com.like.paging.sample.databinding.ActivityPagingBinding
 import com.like.paging.sample.paging.viewModel.PagingViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -25,11 +24,19 @@ class PagingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         mBinding
 
-        lifecycleScope.launch(Dispatchers.IO) {
-            mViewModel.getPagingResult().dataFlow.collect {
-                val state = it.state
-                val type = it.type
-                Logger.d("collect ${Thread.currentThread().name} type=$type state=$state")
+        lifecycleScope.launch {
+            mViewModel.getPagingResult().collect(
+                show = {
+                    Logger.v("show ${Thread.currentThread().name}")
+                },
+                hide = {
+                    Logger.v("hide ${Thread.currentThread().name}")
+                },
+                onError = { requestType, throwable ->
+                    Logger.e("onError ${Thread.currentThread().name} requestType=$requestType throwable=$throwable")
+                }
+            ) { requestType, list ->
+                Logger.d("onSuccess ${Thread.currentThread().name} requestType=$requestType data=$list")
             }
         }
     }

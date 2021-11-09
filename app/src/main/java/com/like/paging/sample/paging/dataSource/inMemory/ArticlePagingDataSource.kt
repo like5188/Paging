@@ -9,6 +9,7 @@ import com.like.paging.sample.data.netWork.RetrofitUtils
 class ArticlePagingDataSource : PageNoKeyedPagingDataSource<List<ArticleEntity>?>(MyApplication.PAGE_SIZE) {
 
     override suspend fun load(requestType: RequestType, pageNo: Int, pageSize: Int): List<ArticleEntity>? {
+//        throw RuntimeException("test error")
         return RetrofitUtils.retrofitApi.getArticle(pageNo).getDataIfSuccess()?.datas
     }
 
