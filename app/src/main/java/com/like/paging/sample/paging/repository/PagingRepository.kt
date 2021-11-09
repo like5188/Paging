@@ -1,7 +1,5 @@
 package com.like.paging.sample.paging.repository
 
-import com.like.paging.sample.data.model.BannerInfo
-import com.like.paging.sample.data.model.TopArticleEntity
 import com.like.paging.sample.paging.dataSource.inDb.ArticlePagingDbDataSource
 import com.like.paging.sample.paging.dataSource.inDb.BannerDbDataSource
 import com.like.paging.sample.paging.dataSource.inDb.MergePagingDbDataSource
@@ -25,15 +23,5 @@ class PagingRepository(
     private val articlePagingDbResult = articlePagingDbDataSource.result()
     private val mergePagingResult = mergePagingDataSource.result()
     private val mergePagingDbResult = mergePagingDbDataSource.result()
-    fun getPagingResult() = mergePagingDbResult
-
-    suspend fun getBanner(isRefresh: Boolean): List<BannerInfo>? {
-        return bannerDbDataSource.load()
-    }
-
-    suspend fun getTopArticle(isRefresh: Boolean): List<TopArticleEntity>? {
-        throw IllegalArgumentException("mock error")
-        return topArticleDbDataSource.load()
-    }
-
+    fun getPagingResult() = articlePagingResult
 }

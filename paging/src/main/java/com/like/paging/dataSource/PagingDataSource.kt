@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 abstract class PagingDataSource<ResultType>(private val isLoadAfter: Boolean) {
     private val isRunning = AtomicBoolean(false)
     private var mFailureRequestType: RequestType? = null
-    private val mFlow = MutableSharedFlow<ResultReport<ResultType>>()
+    private val mDataFlow = MutableSharedFlow<ResultReport<ResultType>>()
 
     fun isRunning() = isRunning.get()
 
@@ -50,15 +50,15 @@ abstract class PagingDataSource<ResultType>(private val isLoadAfter: Boolean) {
 
     private suspend fun loadData(requestType: RequestType) {
         if (isRunning.compareAndSet(false, true)) {
-            mFlow.emit(ResultReport(requestType, RequestState.Running))
+            mDataFlow.emit(ResultReport(requestType, RequestState.Running))
             mFailureRequestType = try {
                 val data = withContext(Dispatchers.IO) {
                     this@PagingDataSource.load(requestType)
                 }
-                mFlow.emit(ResultReport(requestType, RequestState.Success(data)))
+                mDataFlow.emit(ResultReport(requestType, RequestState.Success(data)))
                 null
             } catch (e: Exception) {
-                mFlow.emit(ResultReport(requestType, RequestState.Failed(e)))
+                mDataFlow.emit(ResultReport(requestType, RequestState.Failed(e)))
                 requestType
             } finally {
                 isRunning.compareAndSet(true, false)
@@ -67,7 +67,7 @@ abstract class PagingDataSource<ResultType>(private val isLoadAfter: Boolean) {
     }
 
     fun result(): Result<ResultType> = Result(
-        flow = mFlow,
+        dataFlow = mDataFlow,
         initial = this::initial,
         refresh = this::refresh,
         retry = this::retry,
