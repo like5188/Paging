@@ -11,6 +11,7 @@ import com.like.paging.sample.data.db.Db
 import com.like.paging.sample.databinding.ActivityPagingBinding
 import com.like.paging.sample.paging.viewModel.PagingViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -23,52 +24,77 @@ class PagingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding
-
-        lifecycleScope.launch {
-            mViewModel.getPagingResult().collect(
-                show = {
-                    Logger.v("show ${Thread.currentThread().name}")
-                },
-                hide = {
-                    Logger.v("hide ${Thread.currentThread().name}")
-                },
-                onError = { requestType, throwable ->
-                    Logger.e("onError ${Thread.currentThread().name} requestType=$requestType throwable=$throwable")
-                }
-            ) { requestType, list ->
-                Logger.d("onSuccess ${Thread.currentThread().name} requestType=$requestType data=$list")
-            }
-        }
     }
 
     fun initial(view: View) {
         lifecycleScope.launch {
             mViewModel.getPagingResult().initial()
+                .flowOn(Dispatchers.IO)
+                .onStart {
+                    Logger.v("onStart ${Thread.currentThread().name}")
+                }.onCompletion {
+                    Logger.i("onCompletion ${Thread.currentThread().name} $it")
+                }.catch {
+                    Logger.e("catch ${Thread.currentThread().name} $it")
+                }.flowOn(Dispatchers.Main)
+                .collect {
+                    Logger.d("collect ${Thread.currentThread().name} $it")
+                }
         }
     }
 
     fun refresh(view: View) {
         lifecycleScope.launch {
             mViewModel.getPagingResult().refresh()
+                .flowOn(Dispatchers.IO)
+                .onStart {
+                    Logger.v("onStart ${Thread.currentThread().name}")
+                }.onCompletion {
+                    Logger.i("onCompletion ${Thread.currentThread().name} $it")
+                }.catch {
+                    Logger.e("catch ${Thread.currentThread().name} $it")
+                }.flowOn(Dispatchers.Main)
+                .collect {
+                    Logger.d("collect ${Thread.currentThread().name} $it")
+                }
         }
     }
 
     fun loadAfter(view: View) {
         lifecycleScope.launch {
             mViewModel.getPagingResult().loadAfter?.invoke()
+                ?.flowOn(Dispatchers.IO)
+                ?.onStart {
+                    Logger.v("onStart ${Thread.currentThread().name}")
+                }?.onCompletion {
+                    Logger.i("onCompletion ${Thread.currentThread().name} $it")
+                }?.catch {
+                    Logger.e("catch ${Thread.currentThread().name} $it")
+                }?.flowOn(Dispatchers.Main)
+                ?.collect {
+                    Logger.d("collect ${Thread.currentThread().name} $it")
+                }
         }
     }
 
     fun loadBefore(view: View) {
         lifecycleScope.launch {
             mViewModel.getPagingResult().loadBefore?.invoke()
+                ?.flowOn(Dispatchers.IO)
+                ?.onStart {
+                    Logger.v("onStart ${Thread.currentThread().name}")
+                }?.onCompletion {
+                    Logger.i("onCompletion ${Thread.currentThread().name} $it")
+                }?.catch {
+                    Logger.e("catch ${Thread.currentThread().name} $it")
+                }?.flowOn(Dispatchers.Main)
+                ?.collect {
+                    Logger.d("collect ${Thread.currentThread().name} $it")
+                }
         }
     }
 
     fun retry(view: View) {
-        lifecycleScope.launch {
-            mViewModel.getPagingResult().retry()
-        }
     }
 
     fun clearDb(view: View) {

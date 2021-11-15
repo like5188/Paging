@@ -21,7 +21,7 @@ class MergePagingDataSource(
                     { memoryArticlePagingDataSource.load(requestType, pageNo, pageSize) }
                 ).forEach {
                     it?.let {
-                        result.addAll(it)
+                        result.addAll(it as List<Any>)
                     }
                 }
                 result
