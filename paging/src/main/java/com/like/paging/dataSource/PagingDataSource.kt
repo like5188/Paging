@@ -1,6 +1,7 @@
 package com.like.paging.dataSource
 
 import com.like.paging.RequestType
+import com.like.paging.Result
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
@@ -15,18 +16,23 @@ import kotlinx.coroutines.flow.*
  * @param ResultType    返回的数据类型
  */
 abstract class PagingDataSource<ResultType> {
-
-    open fun initial(): Flow<ResultType> = loadData(RequestType.Initial)
-    open fun refresh(): Flow<ResultType> = loadData(RequestType.Refresh)
-    open fun loadAfter(): Flow<ResultType> = loadData(RequestType.After)
-    open fun loadBefore(): Flow<ResultType> = loadData(RequestType.Before)
-
+    private fun initial() = loadData(RequestType.Initial)
+    private fun refresh() = loadData(RequestType.Refresh)
+    private fun loadAfter() = loadData(RequestType.After)
+    private fun loadBefore() = loadData(RequestType.Before)
     private fun loadData(requestType: RequestType) = flow {
         val data = withContext(Dispatchers.IO) {
             this@PagingDataSource.load(requestType)
         }
         emit(data)
     }
+
+    fun result(): Result<ResultType> = Result(
+        initial = this::initial,
+        refresh = this::refresh,
+        loadAfter = this::loadAfter,
+        loadBefore = this::loadBefore
+    )
 
     abstract suspend fun load(requestType: RequestType): ResultType
 
