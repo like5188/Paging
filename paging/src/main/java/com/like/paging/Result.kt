@@ -10,8 +10,8 @@ data class Result<ResultType>(
     val initial: () -> Flow<ResultType>,
     // 刷新操作
     val refresh: () -> Flow<ResultType>,
-    // 往后加载更多，不分页时不用设置
-    val loadAfter: (() -> Flow<ResultType>)? = null,
-    // 往前加载更多，不分页时不用设置
-    val loadBefore: (() -> Flow<ResultType>)? = null
+    // 往后加载更多
+    val loadAfter: () -> Flow<ResultType>,
+    // 往前加载更多
+    val loadBefore: () -> Flow<ResultType>
 )

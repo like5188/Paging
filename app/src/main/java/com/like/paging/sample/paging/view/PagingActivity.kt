@@ -62,16 +62,16 @@ class PagingActivity : AppCompatActivity() {
 
     fun loadAfter(view: View) {
         lifecycleScope.launch {
-            mViewModel.getPagingResult().loadAfter?.invoke()
-                ?.flowOn(Dispatchers.IO)
-                ?.onStart {
+            mViewModel.getPagingResult().loadAfter()
+                .flowOn(Dispatchers.IO)
+                .onStart {
                     Logger.v("onStart ${Thread.currentThread().name}")
-                }?.onCompletion {
+                }.onCompletion {
                     Logger.i("onCompletion ${Thread.currentThread().name} $it")
-                }?.catch {
+                }.catch {
                     Logger.e("catch ${Thread.currentThread().name} $it")
-                }?.flowOn(Dispatchers.Main)
-                ?.collect {
+                }.flowOn(Dispatchers.Main)
+                .collect {
                     Logger.d("collect ${Thread.currentThread().name} $it")
                 }
         }
@@ -79,16 +79,16 @@ class PagingActivity : AppCompatActivity() {
 
     fun loadBefore(view: View) {
         lifecycleScope.launch {
-            mViewModel.getPagingResult().loadBefore?.invoke()
-                ?.flowOn(Dispatchers.IO)
-                ?.onStart {
+            mViewModel.getPagingResult().loadBefore()
+                .flowOn(Dispatchers.IO)
+                .onStart {
                     Logger.v("onStart ${Thread.currentThread().name}")
-                }?.onCompletion {
+                }.onCompletion {
                     Logger.i("onCompletion ${Thread.currentThread().name} $it")
-                }?.catch {
+                }.catch {
                     Logger.e("catch ${Thread.currentThread().name} $it")
-                }?.flowOn(Dispatchers.Main)
-                ?.collect {
+                }.flowOn(Dispatchers.Main)
+                .collect {
                     Logger.d("collect ${Thread.currentThread().name} $it")
                 }
         }
