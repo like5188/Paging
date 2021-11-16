@@ -7,8 +7,7 @@ import com.like.paging.dataSource.PagingDataSource
 /**
  * 根据自己维护的 pageNo 来作为分页 key 的分页数据源。
  */
-abstract class PageNoKeyedPagingDataSource<ResultType>(private val pageSize: Int, isLoadAfter: Boolean = true) :
-    PagingDataSource<ResultType>(isLoadAfter) {
+abstract class PageNoKeyedPagingDataSource<ResultType>(private val pageSize: Int) : PagingDataSource<ResultType>() {
     private var pageNo: Int = 1
 
     final override suspend fun load(requestType: RequestType): ResultType {

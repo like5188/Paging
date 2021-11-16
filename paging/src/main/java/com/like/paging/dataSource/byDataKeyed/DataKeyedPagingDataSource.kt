@@ -9,8 +9,7 @@ import com.like.paging.dataSource.PagingDataSource
  *
  * @param Key           分页标记数据类型
  */
-abstract class DataKeyedPagingDataSource<Key : Any, ResultType>(private val pageSize: Int, isLoadAfter: Boolean = true) :
-    PagingDataSource<ResultType>(isLoadAfter) {
+abstract class DataKeyedPagingDataSource<Key : Any, ResultType>(private val pageSize: Int) : PagingDataSource<ResultType>() {
     private var key: Key? = null
 
     final override suspend fun load(requestType: RequestType): ResultType {

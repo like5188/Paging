@@ -4,5 +4,5 @@ import androidx.lifecycle.ViewModel
 import com.like.paging.sample.paging.repository.PagingRepository
 
 class PagingViewModel(private val pagingRepository: PagingRepository) : ViewModel() {
-    fun getPagingResult() = pagingRepository.getPagingResult()
+    fun getPagingDataSource() = pagingRepository.getPagingDataSource()
 }
