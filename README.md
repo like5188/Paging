@@ -10,18 +10,12 @@
 2、返回的数据：
 ```java
     data class Result<ResultType>(
-        // 结果报告
-        val resultReportFlow: Flow<ResultReport<ResultType>>,
-        // 初始化操作
+        var flow: Flow<ResultType>,
+        val requestType: () -> RequestType,
         val initial: () -> Unit,
-        // 刷新操作
         val refresh: () -> Unit,
-        // 失败重试操作
-        val retry: () -> Unit,
-        // 往后加载更多，不分页时不用设置
-        val loadAfter: (() -> Unit)? = null,
-        // 往前加载更多，不分页时不用设置
-        val loadBefore: (() -> Unit)? = null
+        val after: () -> Unit,
+        val before: () -> Unit
     )
 ```
 
@@ -53,5 +47,5 @@
 ```java
     1、创建数据源继承自[com.like.paging.dataSource.byDataKeyed.DataKeyedPagingDataSource]、[com.like.paging.dataSource.byPageNoKeyed.PageNoKeyedPagingDataSource]，然后通过 result() 方法获取 [com.like.paging.Result]，再通过它进行相关操作。
 
-    2、如果要使用数据库，可以通过[com.like.paging.dbHelper.IPagingDbHelper]来实现。
+    2、如果要使用数据库，可以通过[com.like.paging.dbHelper.IPagingDbHelper]、[com.like.paging.dbHelper.IDbHelper]工具类来辅助实现。
 ```
