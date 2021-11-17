@@ -8,7 +8,6 @@ import org.koin.core.context.startKoin
 
 class MyApplication : Application() {
     companion object {
-        const val PAGE_SIZE = 20
         lateinit var sInstance: Application
     }
 

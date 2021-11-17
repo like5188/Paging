@@ -3,13 +3,12 @@ package com.like.paging.sample.paging.dataSource.inMemory
 import com.like.common.util.successIfOneSuccess
 import com.like.paging.RequestType
 import com.like.paging.dataSource.byPageNoKeyed.PageNoKeyedPagingDataSource
-import com.like.paging.sample.MyApplication
 
 class MergePagingDataSource(
     private val memoryBannerNotPagingDataSource: BannerDataSource,
     private val memoryTopArticleNotPagingDataSource: TopArticleDataSource,
     private val memoryArticlePagingDataSource: ArticlePagingDataSource
-) : PageNoKeyedPagingDataSource<List<Any>?>(MyApplication.PAGE_SIZE) {
+) : PageNoKeyedPagingDataSource<List<Any>?>(0) {
 
     override suspend fun load(requestType: RequestType, pageNo: Int, pageSize: Int): List<Any>? {
         return when (requestType) {
@@ -32,7 +31,4 @@ class MergePagingDataSource(
         }
     }
 
-    override fun getInitialPage(): Int {
-        return 0
-    }
 }

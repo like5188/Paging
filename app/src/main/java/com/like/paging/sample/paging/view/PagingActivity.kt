@@ -27,69 +27,77 @@ class PagingActivity : AppCompatActivity() {
     }
 
     fun initial(view: View) {
+        val result = mViewModel.getPagingResult()
+        result.initial()
         lifecycleScope.launch {
-            mViewModel.getPagingResult().initial()
+            result.flow
                 .flowOn(Dispatchers.IO)
                 .onStart {
-                    Logger.v("onStart ${Thread.currentThread().name}")
+                    Logger.v("onStart ${Thread.currentThread().name} ${result.requestType()}")
                 }.onCompletion {
-                    Logger.i("onCompletion ${Thread.currentThread().name} $it")
+                    Logger.i("onCompletion ${Thread.currentThread().name} ${result.requestType()} $it")
                 }.catch {
-                    Logger.e("catch ${Thread.currentThread().name} $it")
+                    Logger.e("catch ${Thread.currentThread().name} ${result.requestType()} $it")
                 }.flowOn(Dispatchers.Main)
                 .collect {
-                    Logger.d("collect ${Thread.currentThread().name} $it")
+                    Logger.d("collect ${Thread.currentThread().name} ${result.requestType()} $it")
                 }
         }
     }
 
     fun refresh(view: View) {
+        val result = mViewModel.getPagingResult()
+        result.refresh()
         lifecycleScope.launch {
-            mViewModel.getPagingResult().refresh()
+            result.flow
                 .flowOn(Dispatchers.IO)
                 .onStart {
-                    Logger.v("onStart ${Thread.currentThread().name}")
+                    Logger.v("onStart ${Thread.currentThread().name} ${result.requestType()}")
                 }.onCompletion {
-                    Logger.i("onCompletion ${Thread.currentThread().name} $it")
+                    Logger.i("onCompletion ${Thread.currentThread().name} ${result.requestType()} $it")
                 }.catch {
-                    Logger.e("catch ${Thread.currentThread().name} $it")
+                    Logger.e("catch ${Thread.currentThread().name} ${result.requestType()} $it")
                 }.flowOn(Dispatchers.Main)
                 .collect {
-                    Logger.d("collect ${Thread.currentThread().name} $it")
+                    Logger.d("collect ${Thread.currentThread().name} ${result.requestType()} $it")
                 }
         }
     }
 
     fun loadAfter(view: View) {
+        val result = mViewModel.getPagingResult()
+        result.after()
         lifecycleScope.launch {
-            mViewModel.getPagingResult().loadAfter()
+            result.flow
                 .flowOn(Dispatchers.IO)
                 .onStart {
-                    Logger.v("onStart ${Thread.currentThread().name}")
+                    Logger.v("onStart ${Thread.currentThread().name} ${result.requestType()}")
                 }.onCompletion {
-                    Logger.i("onCompletion ${Thread.currentThread().name} $it")
+                    Logger.i("onCompletion ${Thread.currentThread().name} ${result.requestType()} $it")
                 }.catch {
-                    Logger.e("catch ${Thread.currentThread().name} $it")
+                    Logger.e("catch ${Thread.currentThread().name} ${result.requestType()} $it")
                 }.flowOn(Dispatchers.Main)
                 .collect {
-                    Logger.d("collect ${Thread.currentThread().name} $it")
+                    Logger.d("collect ${Thread.currentThread().name} ${result.requestType()} $it")
                 }
         }
     }
 
     fun loadBefore(view: View) {
+        val result = mViewModel.getPagingResult()
+        result.before()
         lifecycleScope.launch {
-            mViewModel.getPagingResult().loadBefore()
+            result.flow
                 .flowOn(Dispatchers.IO)
                 .onStart {
-                    Logger.v("onStart ${Thread.currentThread().name}")
+                    Logger.v("onStart ${Thread.currentThread().name} ${result.requestType()}")
                 }.onCompletion {
-                    Logger.i("onCompletion ${Thread.currentThread().name} $it")
+                    Logger.i("onCompletion ${Thread.currentThread().name} ${result.requestType()} $it")
                 }.catch {
-                    Logger.e("catch ${Thread.currentThread().name} $it")
+                    Logger.e("catch ${Thread.currentThread().name} ${result.requestType()} $it")
                 }.flowOn(Dispatchers.Main)
                 .collect {
-                    Logger.d("collect ${Thread.currentThread().name} $it")
+                    Logger.d("collect ${Thread.currentThread().name} ${result.requestType()} $it")
                 }
         }
     }
