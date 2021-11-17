@@ -18,6 +18,7 @@ abstract class PageNoKeyedPagingDataSource<ResultType>(
     private var pageNo: Int = initPage
 
     final override suspend fun load(requestType: RequestType): ResultType {
+        val prePageNo = pageNo
         when (requestType) {
             is RequestType.Initial, is RequestType.Refresh -> {
                 pageNo = initPage
@@ -39,20 +40,7 @@ abstract class PageNoKeyedPagingDataSource<ResultType>(
             load(requestType, pageNo, pageSize)
         } catch (e: Exception) {
             // 还原 pageNo
-            when (requestType) {
-                is RequestType.Before -> {
-                    pageNo++
-                    if (pageNo > initPage) {
-                        pageNo = initPage
-                    }
-                }
-                is RequestType.After -> {
-                    pageNo--
-                    if (pageNo < initPage) {
-                        pageNo = initPage
-                    }
-                }
-            }
+            pageNo = prePageNo
             throw e
         }
     }
