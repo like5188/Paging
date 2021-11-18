@@ -9,14 +9,14 @@
 
 2、返回的数据：
 ```java
-    data class Result<ResultType>(
-        var flow: Flow<ResultType>,
-        val requestType: () -> RequestType,
-        val initial: () -> Unit,
-        val refresh: () -> Unit,
-        val after: () -> Unit,
-        val before: () -> Unit
-    )
+/**
+ * @param flow              数据流。在每次调用[Flow.collect]来触发请求之前都需要调用[setRequestType]设置请求类型
+ * @param setRequestType    设置请求类型
+ */
+data class PagingResult<ResultType>(
+    var flow: Flow<ResultType>,
+    val setRequestType: (RequestType) -> Unit,
+)
 ```
 
 ## 使用方法：
@@ -45,7 +45,7 @@
 
 2、使用
 ```java
-    1、创建数据源继承自[com.like.paging.dataSource.byDataKeyed.DataKeyedPagingDataSource]、[com.like.paging.dataSource.byPageNoKeyed.PageNoKeyedPagingDataSource]，然后通过 result() 方法获取 [com.like.paging.Result]，再通过它进行相关操作。
+    1、创建数据源继承自[com.like.paging.dataSource.byDataKeyed.DataKeyedPagingDataSource]、[com.like.paging.dataSource.byPageNoKeyed.PageNoKeyedPagingDataSource]，然后通过 pagingResult() 方法获取 [com.like.paging.PagingResult]，再通过它进行相关操作。
 
     2、如果要使用数据库，可以通过[com.like.paging.dbHelper.IPagingDbHelper]、[com.like.paging.dbHelper.IDbHelper]工具类来辅助实现。
 ```
