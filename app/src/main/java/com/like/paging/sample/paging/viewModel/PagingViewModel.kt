@@ -10,7 +10,7 @@ class PagingViewModel(private val pagingRepository: PagingRepository) : ViewMode
     fun getPagingResult() = pagingRepository.getPagingResult().apply {
         flow = flow
             .retryWhen { cause, attempt ->
-                Logger.w("retryWhen ${Thread.currentThread().name} ${requestType()}")
+                Logger.w("retryWhen ${Thread.currentThread().name}")
                 cause.message == "test error 0" && attempt == 0L
             }.map {
                 it?.take(1)

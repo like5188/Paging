@@ -6,7 +6,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
 /**
- * 分页数据源基类。管理初始化、刷新、往后加载更多、往前加载更多。
+ * 分页数据源基类。
  *
  * @param ResultType    返回的数据类型
  */
@@ -21,11 +21,8 @@ abstract class PagingDataSource<ResultType> {
 
     fun result(): Result<ResultType> = Result(
         flow = mDataFlow,
-        requestType = { mCurRequestType },
-        initial = { mCurRequestType = RequestType.Initial },
-        refresh = { mCurRequestType = RequestType.Refresh },
-        after = { mCurRequestType = RequestType.After },
-        before = { mCurRequestType = RequestType.Before },
+        setRequestType = { mCurRequestType = it },
+        getRequestType = { mCurRequestType }
     )
 
     abstract suspend fun load(requestType: RequestType): ResultType
