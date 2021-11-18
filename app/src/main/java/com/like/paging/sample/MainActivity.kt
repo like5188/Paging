@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
 
         (0..99).forEach {
             lifecycleScope.launch {
-                concurrencyHelper.cancelPreviousThenRun {
+                concurrencyHelper.dropIfPreviousRunning {
                     delay((it - 100L) * -1)
                     test(it)
                 }
