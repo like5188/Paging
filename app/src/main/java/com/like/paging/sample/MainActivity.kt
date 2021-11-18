@@ -8,7 +8,6 @@ import androidx.lifecycle.lifecycleScope
 import com.like.common.util.Logger
 import com.like.paging.sample.paging.view.PagingActivity
 import com.like.paging.util.ConcurrencyHelper
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield
 
@@ -18,22 +17,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val concurrencyHelper = ConcurrencyHelper()
-        lifecycleScope.launch {
-            concurrencyHelper.cancelPreviousThenRun {
-                delay(300)
-                test(1)
-            }
-        }
-        lifecycleScope.launch {
-            concurrencyHelper.cancelPreviousThenRun {
-                delay(200)
-                test(2)
-            }
-        }
-        lifecycleScope.launch {
-            concurrencyHelper.cancelPreviousThenRun {
-                delay(100)
-                test(3)
+
+        (0..999).forEach {
+            lifecycleScope.launch {
+                concurrencyHelper.cancelPreviousThenRun {
+                    test(it)
+                }
             }
         }
     }
