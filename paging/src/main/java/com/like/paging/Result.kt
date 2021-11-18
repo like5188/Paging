@@ -16,47 +16,51 @@ data class Result<ResultType>(
 ) {
     private val mConcurrencyHelper = ConcurrencyHelper()
 
-    suspend fun initial(
-        show: (() -> Unit)? = null,
-        hide: (() -> Unit)? = null,
-        onError: (suspend (Throwable) -> Unit)? = null,
-        onSuccess: (suspend (ResultType) -> Unit)? = null
-    ) {
+    /**
+     * 初始化或者刷新开始时显示进度条
+     */
+    var show: (() -> Unit)? = null
+
+    /**
+     * 初始化或者刷新完成时隐藏进度条
+     */
+    var hide: (() -> Unit)? = null
+
+    /**
+     * 请求失败时回调
+     */
+    var onError: (suspend (RequestType, Throwable) -> Unit)? = null
+
+    /**
+     * 请求成功时回调
+     */
+    var onSuccess: (suspend (RequestType, ResultType) -> Unit)? = null
+
+    suspend fun initial() {
         mConcurrencyHelper.cancelPreviousThenRun {
             setRequestType(RequestType.Initial)
             collect(RequestType.Initial, show, hide, onError, onSuccess)
         }
     }
 
-    suspend fun refresh(
-        show: (() -> Unit)? = null,
-        hide: (() -> Unit)? = null,
-        onError: (suspend (Throwable) -> Unit)? = null,
-        onSuccess: (suspend (ResultType) -> Unit)? = null
-    ) {
+    suspend fun refresh() {
         mConcurrencyHelper.cancelPreviousThenRun {
             setRequestType(RequestType.Refresh)
             collect(RequestType.Refresh, show, hide, onError, onSuccess)
         }
     }
 
-    suspend fun after(
-        onError: (suspend (Throwable) -> Unit)? = null,
-        onSuccess: (suspend (ResultType) -> Unit)? = null
-    ) {
+    suspend fun after() {
         mConcurrencyHelper.dropIfPreviousRunning {
             setRequestType(RequestType.After)
-            collect(RequestType.After, null, null, onError, onSuccess)
+            collect(RequestType.After, show, hide, onError, onSuccess)
         }
     }
 
-    suspend fun before(
-        onError: (suspend (Throwable) -> Unit)? = null,
-        onSuccess: (suspend (ResultType) -> Unit)? = null
-    ) {
+    suspend fun before() {
         mConcurrencyHelper.dropIfPreviousRunning {
             setRequestType(RequestType.Before)
-            collect(RequestType.Before, null, null, onError, onSuccess)
+            collect(RequestType.Before, show, hide, onError, onSuccess)
         }
     }
 
@@ -72,8 +76,8 @@ data class Result<ResultType>(
         requestType: RequestType,
         show: (() -> Unit)? = null,
         hide: (() -> Unit)? = null,
-        onError: (suspend (Throwable) -> Unit)? = null,
-        onSuccess: (suspend (ResultType) -> Unit)? = null,
+        onError: (suspend (RequestType, Throwable) -> Unit)? = null,
+        onSuccess: (suspend (RequestType, ResultType) -> Unit)? = null,
     ) {
         flow.flowOn(Dispatchers.IO)
             .onStart {
@@ -85,10 +89,10 @@ data class Result<ResultType>(
                     hide?.invoke()
                 }
             }.catch {
-                onError?.invoke(it)
+                onError?.invoke(requestType, it)
             }.flowOn(Dispatchers.Main)
             .collect {
-                onSuccess?.invoke(it)
+                onSuccess?.invoke(requestType, it)
             }
     }
 
