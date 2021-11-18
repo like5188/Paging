@@ -1,12 +1,12 @@
 package com.like.paging.dataSource
 
+import com.like.paging.PagingResult
 import com.like.paging.RequestType
-import com.like.paging.Result
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
 /**
- * 分页数据源基类。
+ * 分页请求数据源基类。
  *
  * @param ResultType    返回的数据类型
  */
@@ -19,7 +19,7 @@ abstract class PagingDataSource<ResultType> {
         emit(data)
     }
 
-    fun result(): Result<ResultType> = Result(
+    fun pagingResult(): PagingResult<ResultType> = PagingResult(
         flow = mDataFlow,
         setRequestType = { mCurRequestType = it }
     )

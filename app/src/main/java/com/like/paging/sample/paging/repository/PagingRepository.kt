@@ -19,9 +19,9 @@ class PagingRepository(
     private val mergePagingDataSource: MergePagingDataSource,
     private val mergePagingDbDataSource: MergePagingDbDataSource
 ) {
-    private val articlePagingResult = articlePagingDataSource.result()
-    private val articlePagingDbResult = articlePagingDbDataSource.result()
-    private val mergePagingResult = mergePagingDataSource.result()
-    private val mergePagingDbResult = mergePagingDbDataSource.result()
+    private val articlePagingResult = articlePagingDataSource.pagingResult()
+    private val articlePagingDbResult = articlePagingDbDataSource.pagingResult()
+    private val mergePagingResult = mergePagingDataSource.pagingResult()
+    private val mergePagingDbResult = mergePagingDbDataSource.pagingResult()
     fun getPagingResult() = articlePagingResult
 }

@@ -6,11 +6,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import com.like.common.util.Logger
+import com.like.paging.RequestType
 import com.like.paging.sample.R
 import com.like.paging.sample.data.db.Db
 import com.like.paging.sample.databinding.ActivityPagingBinding
 import com.like.paging.sample.paging.viewModel.PagingViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -19,22 +21,6 @@ class PagingActivity : AppCompatActivity() {
         DataBindingUtil.setContentView<ActivityPagingBinding>(this, R.layout.activity_paging)
     }
     private val mViewModel: PagingViewModel by viewModel()
-    private val result by lazy {
-        mViewModel.getPagingResult().apply {
-            show = {
-                Logger.v("show ${Thread.currentThread().name}")
-            }
-            hide = {
-                Logger.v("hide ${Thread.currentThread().name}")
-            }
-            onError = { requestType, throwable ->
-                Logger.e("onError ${Thread.currentThread().name} $requestType $throwable")
-            }
-            onSuccess = { requestType, resultType ->
-                Logger.d("onSuccess ${Thread.currentThread().name} $requestType $resultType")
-            }
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,26 +28,74 @@ class PagingActivity : AppCompatActivity() {
     }
 
     fun initial(view: View) {
+        val result = mViewModel.getPagingResult()
         lifecycleScope.launch {
-            result.initial()
+            result.setRequestType(RequestType.Initial)
+            result.flow.flowOn(Dispatchers.IO)
+                .onStart {
+                    Logger.v("Initial onStart ${Thread.currentThread().name}")
+                }.onCompletion {
+                    Logger.v("Initial onCompletion ${Thread.currentThread().name} $it")
+                }.catch {
+                    Logger.e("Initial onError ${Thread.currentThread().name} $it")
+                }.flowOn(Dispatchers.Main)
+                .collect {
+                    Logger.d("Initial onSuccess ${Thread.currentThread().name} $it")
+                }
         }
     }
 
     fun refresh(view: View) {
+        val result = mViewModel.getPagingResult()
         lifecycleScope.launch {
-            result.refresh()
+            result.setRequestType(RequestType.Refresh)
+            result.flow.flowOn(Dispatchers.IO)
+                .onStart {
+                    Logger.v("Refresh onStart ${Thread.currentThread().name}")
+                }.onCompletion {
+                    Logger.v("Refresh onCompletion ${Thread.currentThread().name} $it")
+                }.catch {
+                    Logger.e("Refresh onError ${Thread.currentThread().name} $it")
+                }.flowOn(Dispatchers.Main)
+                .collect {
+                    Logger.d("Refresh onSuccess ${Thread.currentThread().name} $it")
+                }
         }
     }
 
     fun loadAfter(view: View) {
+        val result = mViewModel.getPagingResult()
         lifecycleScope.launch {
-            result.after()
+            result.setRequestType(RequestType.After)
+            result.flow.flowOn(Dispatchers.IO)
+                .onStart {
+                    Logger.v("After onStart ${Thread.currentThread().name}")
+                }.onCompletion {
+                    Logger.v("After onCompletion ${Thread.currentThread().name} $it")
+                }.catch {
+                    Logger.e("After onError ${Thread.currentThread().name} $it")
+                }.flowOn(Dispatchers.Main)
+                .collect {
+                    Logger.d("After onSuccess ${Thread.currentThread().name} $it")
+                }
         }
     }
 
     fun loadBefore(view: View) {
+        val result = mViewModel.getPagingResult()
         lifecycleScope.launch {
-            result.before()
+            result.setRequestType(RequestType.Before)
+            result.flow.flowOn(Dispatchers.IO)
+                .onStart {
+                    Logger.v("Before onStart ${Thread.currentThread().name}")
+                }.onCompletion {
+                    Logger.v("Before onCompletion ${Thread.currentThread().name} $it")
+                }.catch {
+                    Logger.e("Before onError ${Thread.currentThread().name} $it")
+                }.flowOn(Dispatchers.Main)
+                .collect {
+                    Logger.d("Before onSuccess ${Thread.currentThread().name} $it")
+                }
         }
     }
 
