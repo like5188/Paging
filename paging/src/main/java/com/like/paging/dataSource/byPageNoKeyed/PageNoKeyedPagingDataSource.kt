@@ -6,34 +6,26 @@ import com.like.paging.dataSource.PagingDataSource
 /**
  * 根据自己维护的 pageNo 来作为分页 key 的分页数据源。
  *
- * @param initPage      往前或者往后的初始页码。默认为 1
- * @param limitPage     往前或者往后的极限页码。默认为 [Int.MAX_VALUE]
- * @param pageSize      每页加载数量。默认为 10
+ * @param initialPage       往前或者往后的初始页码。默认为 1
+ * @param pageSize          每页加载数量。默认为 10
  */
 abstract class PageNoKeyedPagingDataSource<ResultType>(
-    private val initPage: Int = 1,
-    private val limitPage: Int = Int.MAX_VALUE,
+    private val initialPage: Int = 1,
     private val pageSize: Int = 10
 ) : PagingDataSource<ResultType>() {
-    private var pageNo: Int = initPage
+    private var pageNo: Int = initialPage
 
     final override suspend fun load(requestType: RequestType): ResultType {
         val prePageNo = pageNo
         when (requestType) {
             is RequestType.Initial, is RequestType.Refresh -> {
-                pageNo = initPage
+                pageNo = initialPage
             }
             is RequestType.Before -> {
                 pageNo--
-                if (pageNo < limitPage) {
-                    pageNo = limitPage
-                }
             }
             is RequestType.After -> {
                 pageNo++
-                if (pageNo > limitPage) {
-                    pageNo = limitPage
-                }
             }
         }
         return try {

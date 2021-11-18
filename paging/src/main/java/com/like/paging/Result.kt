@@ -13,55 +13,50 @@ import kotlinx.coroutines.flow.*
 data class Result<ResultType>(
     var flow: Flow<ResultType>,
     private val setRequestType: (RequestType) -> Unit,
-    private val getRequestType: () -> RequestType
 ) {
     private val mConcurrencyHelper = ConcurrencyHelper()
 
     suspend fun initial(
         show: (() -> Unit)? = null,
         hide: (() -> Unit)? = null,
-        onError: (suspend (RequestType, Throwable) -> Unit)? = null,
-        onSuccess: (suspend (RequestType, ResultType) -> Unit)? = null
+        onError: (suspend (Throwable) -> Unit)? = null,
+        onSuccess: (suspend (ResultType) -> Unit)? = null
     ) {
         mConcurrencyHelper.cancelPreviousThenRun {
             setRequestType(RequestType.Initial)
-            collect(show, hide, onError, onSuccess)
+            collect(RequestType.Initial, show, hide, onError, onSuccess)
         }
     }
 
     suspend fun refresh(
         show: (() -> Unit)? = null,
         hide: (() -> Unit)? = null,
-        onError: (suspend (RequestType, Throwable) -> Unit)? = null,
-        onSuccess: (suspend (RequestType, ResultType) -> Unit)? = null
+        onError: (suspend (Throwable) -> Unit)? = null,
+        onSuccess: (suspend (ResultType) -> Unit)? = null
     ) {
         mConcurrencyHelper.cancelPreviousThenRun {
             setRequestType(RequestType.Refresh)
-            collect(show, hide, onError, onSuccess)
+            collect(RequestType.Refresh, show, hide, onError, onSuccess)
         }
     }
 
     suspend fun after(
-        show: (() -> Unit)? = null,
-        hide: (() -> Unit)? = null,
-        onError: (suspend (RequestType, Throwable) -> Unit)? = null,
-        onSuccess: (suspend (RequestType, ResultType) -> Unit)? = null
+        onError: (suspend (Throwable) -> Unit)? = null,
+        onSuccess: (suspend (ResultType) -> Unit)? = null
     ) {
         mConcurrencyHelper.dropIfPreviousRunning {
             setRequestType(RequestType.After)
-            collect(show, hide, onError, onSuccess)
+            collect(RequestType.After, null, null, onError, onSuccess)
         }
     }
 
     suspend fun before(
-        show: (() -> Unit)? = null,
-        hide: (() -> Unit)? = null,
-        onError: (suspend (RequestType, Throwable) -> Unit)? = null,
-        onSuccess: (suspend (RequestType, ResultType) -> Unit)? = null
+        onError: (suspend (Throwable) -> Unit)? = null,
+        onSuccess: (suspend (ResultType) -> Unit)? = null
     ) {
         mConcurrencyHelper.dropIfPreviousRunning {
             setRequestType(RequestType.Before)
-            collect(show, hide, onError, onSuccess)
+            collect(RequestType.Before, null, null, onError, onSuccess)
         }
     }
 
@@ -74,12 +69,12 @@ data class Result<ResultType>(
      * @param onSuccess         请求成功时回调。
      */
     private suspend fun collect(
+        requestType: RequestType,
         show: (() -> Unit)? = null,
         hide: (() -> Unit)? = null,
-        onError: (suspend (RequestType, Throwable) -> Unit)? = null,
-        onSuccess: (suspend (RequestType, ResultType) -> Unit)? = null,
+        onError: (suspend (Throwable) -> Unit)? = null,
+        onSuccess: (suspend (ResultType) -> Unit)? = null,
     ) {
-        val requestType = getRequestType()
         flow.flowOn(Dispatchers.IO)
             .onStart {
                 if (requestType is RequestType.Initial || requestType is RequestType.Refresh) {
@@ -90,10 +85,10 @@ data class Result<ResultType>(
                     hide?.invoke()
                 }
             }.catch {
-                onError?.invoke(requestType, it)
+                onError?.invoke(it)
             }.flowOn(Dispatchers.Main)
             .collect {
-                onSuccess?.invoke(requestType, it)
+                onSuccess?.invoke(it)
             }
     }
 

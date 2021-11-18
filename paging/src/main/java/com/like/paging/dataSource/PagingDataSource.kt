@@ -21,8 +21,7 @@ abstract class PagingDataSource<ResultType> {
 
     fun result(): Result<ResultType> = Result(
         flow = mDataFlow,
-        setRequestType = { mCurRequestType = it },
-        getRequestType = { mCurRequestType }
+        setRequestType = { mCurRequestType = it }
     )
 
     abstract suspend fun load(requestType: RequestType): ResultType
