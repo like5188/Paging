@@ -19,13 +19,6 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:onClick="initial"
-                android:text="initial"
-                android:textAllCaps="false" />
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:onClick="refresh"
                 android:text="refresh"
                 android:textAllCaps="false" />
